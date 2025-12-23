@@ -3,10 +3,11 @@ import { prisma } from "@/lib/prisma"
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { name: string } }
+  { params }: { params: Promise<{ name: string }> }
 ) {
   try {
-    const setName = decodeURIComponent(params.name)
+    const { name } = await params
+    const setName = decodeURIComponent(name)
 
     // Check if set is used in any tests
     const testsWithSet = await prisma.test.findMany({

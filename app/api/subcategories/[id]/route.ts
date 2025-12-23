@@ -9,14 +9,15 @@ const subCategoryUpdateSchema = z.object({
 
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params
     const body = await request.json()
     const validatedData = subCategoryUpdateSchema.parse(body)
 
     const subCategory = await prisma.subCategory.update({
-      where: { id: params.id },
+      where: { id },
       data: validatedData,
       include: {
         category: true,
@@ -53,12 +54,13 @@ export async function PATCH(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params
     // Check if subcategory is in use
     const testCount = await prisma.test.count({
-      where: { subCategoryId: params.id },
+      where: { subCategoryId: id },
     })
 
     if (testCount > 0) {
@@ -73,7 +75,7 @@ export async function DELETE(
     }
 
     await prisma.subCategory.delete({
-      where: { id: params.id },
+      where: { id },
     })
 
     return NextResponse.json({ success: true })

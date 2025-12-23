@@ -3,10 +3,11 @@ import { prisma } from "@/lib/prisma"
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { name: string } }
+  { params }: { params: Promise<{ name: string }> }
 ) {
   try {
-    const tagName = decodeURIComponent(params.name)
+    const { name } = await params
+    const tagName = decodeURIComponent(name)
 
     // Check if tag is used in any tests
     const testsWithTag = await prisma.test.findMany({

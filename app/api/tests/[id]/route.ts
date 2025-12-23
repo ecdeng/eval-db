@@ -4,11 +4,12 @@ import { testUpdateSchema } from "@/lib/validations"
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params
     const test = await prisma.test.findUnique({
-      where: { id: params.id },
+      where: { id },
       include: {
         category: true,
         subCategory: true,
@@ -31,14 +32,15 @@ export async function GET(
 
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params
     const body = await request.json()
     const validatedData = testUpdateSchema.parse(body)
 
     const test = await prisma.test.update({
-      where: { id: params.id },
+      where: { id },
       data: validatedData,
       include: {
         category: true,
@@ -67,11 +69,12 @@ export async function PATCH(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params
     await prisma.test.delete({
-      where: { id: params.id },
+      where: { id },
     })
 
     return NextResponse.json({ success: true })
