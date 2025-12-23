@@ -33,9 +33,9 @@ export type SubCategory = {
 
 export type TestFilters = {
   search?: string
-  categoryId?: string
-  subCategoryId?: string
-  difficulty?: string
+  categoryId?: string | string[]
+  subCategoryId?: string | string[]
+  difficulty?: string | string[]
   toolTags?: string[]
   testSets?: string[]
   page?: number
@@ -48,9 +48,18 @@ const API_BASE = "/api"
 export function useTests(filters: TestFilters = {}) {
   const params = new URLSearchParams()
   if (filters.search) params.append("search", filters.search)
-  if (filters.categoryId) params.append("categoryId", filters.categoryId)
-  if (filters.subCategoryId) params.append("subCategoryId", filters.subCategoryId)
-  if (filters.difficulty) params.append("difficulty", filters.difficulty)
+  if (filters.categoryId) {
+    const categoryIds = Array.isArray(filters.categoryId) ? filters.categoryId : [filters.categoryId]
+    categoryIds.forEach((id) => params.append("categoryId", id))
+  }
+  if (filters.subCategoryId) {
+    const subCategoryIds = Array.isArray(filters.subCategoryId) ? filters.subCategoryId : [filters.subCategoryId]
+    subCategoryIds.forEach((id) => params.append("subCategoryId", id))
+  }
+  if (filters.difficulty) {
+    const difficulties = Array.isArray(filters.difficulty) ? filters.difficulty : [filters.difficulty]
+    difficulties.forEach((d) => params.append("difficulty", d))
+  }
   if (filters.toolTags) {
     filters.toolTags.forEach((tag) => params.append("toolTags", tag))
   }

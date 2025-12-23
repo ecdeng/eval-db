@@ -15,6 +15,13 @@ import { parse } from "json2csv"
 
 export default function Dashboard() {
   const [filters, setFilters] = useState<TestFilters>({})
+  const [columnFilters, setColumnFilters] = useState<{
+    categoryIds?: string[]
+    subCategoryIds?: string[]
+    difficulties?: string[]
+    toolTags?: string[]
+    testSets?: string[]
+  }>({})
   const [selectedTests, setSelectedTests] = useState<string[]>([])
   const [isTestFormOpen, setIsTestFormOpen] = useState(false)
   const [editingTest, setEditingTest] = useState<string | null>(null)
@@ -23,7 +30,30 @@ export default function Dashboard() {
   const [isSettingsOpen, setIsSettingsOpen] = useState(false)
   const [isFiltersOpen, setIsFiltersOpen] = useState(false)
 
-  const { data, isLoading } = useTests(filters)
+  // Merge column filters with sidebar filters
+  // Column filters take precedence - if a column filter is set, it overrides the sidebar filter
+  // If column filter is empty array, it means "no filter" for that field
+  const mergedFilters: TestFilters = {
+    ...filters,
+    // Only override if column filter has been set (not undefined)
+    ...(columnFilters.categoryIds !== undefined && {
+      categoryId: columnFilters.categoryIds.length > 0 ? columnFilters.categoryIds : undefined,
+    }),
+    ...(columnFilters.subCategoryIds !== undefined && {
+      subCategoryId: columnFilters.subCategoryIds.length > 0 ? columnFilters.subCategoryIds : undefined,
+    }),
+    ...(columnFilters.difficulties !== undefined && {
+      difficulty: columnFilters.difficulties.length > 0 ? columnFilters.difficulties : undefined,
+    }),
+    ...(columnFilters.toolTags !== undefined && {
+      toolTags: columnFilters.toolTags.length > 0 ? columnFilters.toolTags : undefined,
+    }),
+    ...(columnFilters.testSets !== undefined && {
+      testSets: columnFilters.testSets.length > 0 ? columnFilters.testSets : undefined,
+    }),
+  }
+
+  const { data, isLoading } = useTests(mergedFilters)
   const { addToast } = useToast()
 
   const handleExport = () => {
@@ -37,8 +67,24 @@ export default function Dashboard() {
     }
 
     try {
+      // Filter tests based on selection: if rows are selected, only export those
+      // Otherwise, export all filtered tests
+      const testsToExport =
+        selectedTests.length > 0
+          ? data.tests.filter((test) => selectedTests.includes(test.id))
+          : data.tests
+
+      if (testsToExport.length === 0) {
+        addToast({
+          title: "No data to export",
+          description: "No tests selected for export",
+          variant: "default",
+        })
+        return
+      }
+
       // Flatten nested objects for CSV export
-      const flattenedTests = data.tests.map((test) => ({
+      const flattenedTests = testsToExport.map((test) => ({
         id: test.id,
         prompt: test.prompt,
         initialUrl: test.initialUrl,
@@ -76,7 +122,9 @@ export default function Dashboard() {
 
       addToast({
         title: "Export successful",
-        description: `Exported ${data.tests.length} test(s)`,
+        description: `Exported ${testsToExport.length} test(s)${
+          selectedTests.length > 0 ? " (selected)" : ""
+        }`,
         variant: "default",
       })
     } catch (error) {
@@ -159,6 +207,8 @@ export default function Dashboard() {
               setEditingTest(test.id)
               setIsTestFormOpen(true)
             }}
+            filters={columnFilters}
+            onFiltersChange={setColumnFilters}
           />
         </main>
       </div>

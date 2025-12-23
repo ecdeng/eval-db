@@ -9,9 +9,9 @@ export async function GET(request: NextRequest) {
   try {
     const searchParams = request.nextUrl.searchParams
     const search = searchParams.get("search")
-    const categoryId = searchParams.get("categoryId")
-    const subCategoryId = searchParams.get("subCategoryId")
-    const difficulty = searchParams.get("difficulty")
+    const categoryIds = searchParams.getAll("categoryId")
+    const subCategoryIds = searchParams.getAll("subCategoryId")
+    const difficulties = searchParams.getAll("difficulty")
     const toolTags = searchParams.getAll("toolTags")
     const testSets = searchParams.getAll("testSets")
     const page = parseInt(searchParams.get("page") || "1")
@@ -27,16 +27,16 @@ export async function GET(request: NextRequest) {
       ]
     }
 
-    if (categoryId) {
-      where.categoryId = categoryId
+    if (categoryIds.length > 0) {
+      where.categoryId = categoryIds.length === 1 ? categoryIds[0] : { in: categoryIds }
     }
 
-    if (subCategoryId) {
-      where.subCategoryId = subCategoryId
+    if (subCategoryIds.length > 0) {
+      where.subCategoryId = subCategoryIds.length === 1 ? subCategoryIds[0] : { in: subCategoryIds }
     }
 
-    if (difficulty) {
-      where.difficulty = difficulty
+    if (difficulties.length > 0) {
+      where.difficulty = difficulties.length === 1 ? difficulties[0] : { in: difficulties }
     }
 
     if (toolTags.length > 0) {
