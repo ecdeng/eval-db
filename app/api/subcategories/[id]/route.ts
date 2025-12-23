@@ -7,6 +7,8 @@ const subCategoryUpdateSchema = z.object({
   categoryId: z.string().min(1, "Category is required").optional(),
 })
 
+export const dynamic = 'force-dynamic'
+
 export async function PATCH(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }

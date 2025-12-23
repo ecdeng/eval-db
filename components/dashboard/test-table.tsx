@@ -15,6 +15,7 @@ import { Edit, Trash2 } from "lucide-react"
 import { useDeleteTest, type Test } from "@/lib/api"
 import { useToast } from "@/components/ui/toast"
 import { format } from "date-fns"
+import { Tooltip } from "@/components/ui/tooltip"
 
 interface TestTableProps {
   tests: Test[]
@@ -167,7 +168,7 @@ export function TestTable({
                 />
               </TableCell>
               <TableCell className="max-w-md">
-                <div className="truncate" title={test.prompt}>
+                <div className="whitespace-normal break-words">
                   {test.prompt}
                 </div>
               </TableCell>
@@ -190,38 +191,96 @@ export function TestTable({
                 </span>
               </TableCell>
               <TableCell>
-                <div className="flex flex-wrap gap-1">
-                  {test.toolTags.slice(0, 2).map((tag) => (
-                    <span
-                      key={tag}
-                      className="px-2 py-0.5 bg-blue-100 text-blue-800 text-xs rounded"
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                  {test.toolTags.length > 2 && (
-                    <span className="text-xs text-muted-foreground">
-                      +{test.toolTags.length - 2}
-                    </span>
-                  )}
-                </div>
+                {test.toolTags.length > 2 ? (
+                  <Tooltip
+                    content={
+                      <div className="flex flex-col gap-1">
+                        <div className="font-semibold mb-1">All Tool Tags:</div>
+                        <div className="flex flex-wrap gap-1">
+                          {test.toolTags.map((tag) => (
+                            <span
+                              key={tag}
+                              className="px-2 py-0.5 bg-blue-200 text-blue-900 text-xs rounded"
+                            >
+                              {tag}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    }
+                  >
+                    <div className="flex flex-wrap gap-1">
+                      {test.toolTags.slice(0, 2).map((tag) => (
+                        <span
+                          key={tag}
+                          className="px-2 py-0.5 bg-blue-100 text-blue-800 text-xs rounded"
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                      <span className="text-xs text-muted-foreground cursor-help">
+                        +{test.toolTags.length - 2}
+                      </span>
+                    </div>
+                  </Tooltip>
+                ) : (
+                  <div className="flex flex-wrap gap-1">
+                    {test.toolTags.map((tag) => (
+                      <span
+                        key={tag}
+                        className="px-2 py-0.5 bg-blue-100 text-blue-800 text-xs rounded"
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                )}
               </TableCell>
               <TableCell>
-                <div className="flex flex-wrap gap-1">
-                  {test.testSets.slice(0, 2).map((set) => (
-                    <span
-                      key={set}
-                      className="px-2 py-0.5 bg-purple-100 text-purple-800 text-xs rounded"
-                    >
-                      {set}
-                    </span>
-                  ))}
-                  {test.testSets.length > 2 && (
-                    <span className="text-xs text-muted-foreground">
-                      +{test.testSets.length - 2}
-                    </span>
-                  )}
-                </div>
+                {test.testSets.length > 2 ? (
+                  <Tooltip
+                    content={
+                      <div className="flex flex-col gap-1">
+                        <div className="font-semibold mb-1">All Test Sets:</div>
+                        <div className="flex flex-wrap gap-1">
+                          {test.testSets.map((set) => (
+                            <span
+                              key={set}
+                              className="px-2 py-0.5 bg-purple-200 text-purple-900 text-xs rounded"
+                            >
+                              {set}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    }
+                  >
+                    <div className="flex flex-wrap gap-1">
+                      {test.testSets.slice(0, 2).map((set) => (
+                        <span
+                          key={set}
+                          className="px-2 py-0.5 bg-purple-100 text-purple-800 text-xs rounded"
+                        >
+                          {set}
+                        </span>
+                      ))}
+                      <span className="text-xs text-muted-foreground cursor-help">
+                        +{test.testSets.length - 2}
+                      </span>
+                    </div>
+                  </Tooltip>
+                ) : (
+                  <div className="flex flex-wrap gap-1">
+                    {test.testSets.map((set) => (
+                      <span
+                        key={set}
+                        className="px-2 py-0.5 bg-purple-100 text-purple-800 text-xs rounded"
+                      >
+                        {set}
+                      </span>
+                    ))}
+                  </div>
+                )}
               </TableCell>
               <TableCell className="text-sm text-muted-foreground">
                 {format(new Date(test.updatedAt), "MMM d, yyyy")}

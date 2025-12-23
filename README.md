@@ -1,4 +1,4 @@
-# Browser Agent Test Management
+# evaldb
 
 A centralized repository and management interface for browser agent evaluations. This system allows engineers to curate, categorize, and tag test cases to measure agent performance across different web domains and tool requirements.
 

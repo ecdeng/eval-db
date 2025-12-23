@@ -1,6 +1,6 @@
 # Deployment Guide
 
-This guide will help you deploy the Browser Agent Test Management application to Vercel (recommended) or other platforms.
+This guide will help you deploy the evaldb application to Vercel (recommended) or other platforms.
 
 ## Option 1: Vercel (Recommended)
 

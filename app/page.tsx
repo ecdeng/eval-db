@@ -109,7 +109,7 @@ export default function Dashboard() {
               >
                 <Filter className="h-4 w-4" />
               </Button>
-              <h1 className="text-xl sm:text-2xl font-bold">Browser Agent Test Management</h1>
+              <h1 className="text-xl sm:text-2xl font-bold">evaldb</h1>
             </div>
             <div className="flex flex-wrap items-center gap-2">
               <Button

@@ -6,7 +6,7 @@ import { Providers } from "@/components/providers"
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "Browser Agent Test Management",
+  title: "evaldb",
   description: "Centralized repository for browser agent evaluations",
 }
 
