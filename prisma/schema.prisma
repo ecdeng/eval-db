@@ -1,0 +1,69 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Test {
+  id             String      @id @default(uuid())
+  prompt         String
+  initialUrl     String      @map("initial_url")
+  golden         String
+  difficulty     String      // "simple" | "complex"
+  
+  category       Category    @relation(fields: [categoryId], references: [id])
+  categoryId     String      @map("category_id")
+  subCategory    SubCategory @relation(fields: [subCategoryId], references: [id])
+  subCategoryId  String      @map("sub_category_id")
+
+  toolTags       String[]    @map("tool_tags") @default([])
+  testSets       String[]    @map("test_sets") @default([])
+
+  createdAt      DateTime    @default(now()) @map("created_at")
+  updatedAt      DateTime    @updatedAt @map("updated_at")
+
+  @@map("tests")
+}
+
+model Category {
+  id             String        @id @default(cuid())
+  name           String        @unique
+  subCategories  SubCategory[]
+  tests          Test[]
+
+  @@map("categories")
+}
+
+model SubCategory {
+  id           String     @id @default(cuid())
+  name         String
+  category     Category   @relation(fields: [categoryId], references: [id])
+  categoryId   String     @map("category_id")
+  tests        Test[]
+
+  @@unique([name, categoryId])
+  @@map("sub_categories")
+}
+
+model ToolTag {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("tool_tags")
+}
+
+model TestSet {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("test_sets")
+}
+
