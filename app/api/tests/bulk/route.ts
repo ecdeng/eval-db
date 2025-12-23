@@ -81,7 +81,11 @@ export async function POST(request: NextRequest) {
 
       if (!categoryToUse) {
         // Get any category
-        categoryToUse = await prisma.category.findFirst()
+        categoryToUse = await prisma.category.findFirst({
+          include: {
+            subCategories: true,
+          },
+        })
         if (!categoryToUse) {
           return NextResponse.json(
             { error: "No categories found. Please create at least one category first." },
