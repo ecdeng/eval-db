@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 
+export const dynamic = 'force-dynamic'
+
 // Test sets are stored both in the test_sets table and as arrays in tests
 export async function GET() {
   try {
