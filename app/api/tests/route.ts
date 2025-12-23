@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma"
 import { testSchema } from "@/lib/validations"
 
 export const dynamic = 'force-dynamic'
+export const runtime = 'nodejs'
 
 export async function GET(request: NextRequest) {
   try {

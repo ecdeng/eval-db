@@ -8,6 +8,7 @@ const subCategoryUpdateSchema = z.object({
 })
 
 export const dynamic = 'force-dynamic'
+export const runtime = 'nodejs'
 
 export async function PATCH(
   request: NextRequest,

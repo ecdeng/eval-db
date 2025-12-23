@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma"
 import { categorySchema } from "@/lib/validations"
 
 export const dynamic = 'force-dynamic'
+export const runtime = 'nodejs'
 
 export async function PATCH(
   request: NextRequest,

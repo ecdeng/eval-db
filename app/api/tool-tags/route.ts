@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 
 export const dynamic = 'force-dynamic'
+export const runtime = 'nodejs'
 
 // Tool tags are stored both in the tool_tags table and as arrays in tests
 export async function GET() {
