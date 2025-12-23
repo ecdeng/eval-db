@@ -260,11 +260,17 @@ export function TestForm({ open, onOpenChange, testId }: TestFormProps) {
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        {subCategories?.map((subCat) => (
-                          <SelectItem key={subCat.id} value={subCat.id}>
-                            {subCat.name}
+                        {subCategories && subCategories.length > 0 ? (
+                          subCategories.map((subCat) => (
+                            <SelectItem key={subCat.id} value={subCat.id}>
+                              {subCat.name}
+                            </SelectItem>
+                          ))
+                        ) : (
+                          <SelectItem value="" disabled>
+                            No sub-categories available
                           </SelectItem>
-                        ))}
+                        )}
                       </SelectContent>
                     </Select>
                     <FormMessage />

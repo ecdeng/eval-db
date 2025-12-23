@@ -299,6 +299,7 @@ export function useSubCategories(categoryId?: string) {
       if (!res.ok) throw new Error("Failed to fetch subcategories")
       return res.json()
     },
+    enabled: !!categoryId && categoryId.trim() !== "",
   })
 }
 
