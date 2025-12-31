@@ -1,6 +1,6 @@
 # evaldb
 
-A centralized repository and management interface for browser agent evaluations. This system allows engineers to curate, categorize, and tag test cases to measure agent performance across different web domains and tool requirements.
+A centralized repository and management interface for browser agent evaluations. This system allows engineers to curate, categorize, and tag test cases to measure agent performance across different web domains and tool requirements. Play with it here: https://eval-db.vercel.app/
 
 ## Features
 
